@@ -1,9 +1,11 @@
 <template>
   <div class="home">
-    <form @submit.prevent="saveBook()">
+    <form @submit.prevent="saveBook">
     <p>Edit</p>
-    <v-text-field label="Title"></v-text-field>
+    <v-text-field v-model="form.title" name="title" label="Title"></v-text-field>
     <v-file-input
+      v-model="file"
+      name="file"
       show-size
       truncate-length="50"
     ></v-file-input>
@@ -28,19 +30,25 @@ export default {
   },
   methods: {
     saveBook() {
-      console.log('test save')
-      helpers.makeRequest("books", "post", {
-        data: {
-          title: "test"
-        }
-      }).then(res => {
-        this.items = res.data
-      })
+      
+
+      helpers.formDataRequest("books/new", {model: JSON.stringify(this.form), file: this.file})
+      return;
+      // helpers.uploadFile()
+      // helpers.makeRequest("books/new", "post", {
+      //   data: {
+      //     title: "test"
+      //   }
+      // }).then(res => {
+      //   this.items = res.data
+      // })
     }
   },
   data() {
     return {
-      items: []
+      items: [],
+      form: {},
+      file: null
     }
   },
   mounted() {

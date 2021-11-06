@@ -12,13 +12,14 @@ import helpers from '../helpers.js';
 
 // import axios from 'axios'
 export default {
-  name: 'Home',
+  name: 'Book',
   components: {
     BookList
   },
   data() {
     return {
-      items: []
+      items: [],
+      loaded: false
     }
   },
   mounted() {
@@ -26,9 +27,17 @@ export default {
     //   console.log(res)
     // })
     // this.makeRequest("http://localhost:8080/home", "GET")
-    helpers.makeRequest("books", "get").then(res => {
-      this.items = res.data
-    })
+    
+    
+  },
+  created() {
+    if (!this.loaded) {
+      helpers.makeRequest("books", "get").then(res => {
+        this.items = res.data
+        this.loaded = true;
+      })
+    }
   }
+
 }
 </script>

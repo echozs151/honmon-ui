@@ -5,7 +5,7 @@ function makeRequest (url, type, config = {}) {
     const password = 'user'
     // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
 
-    config = {...config, 
+    config = { 
         // withCredentials: true
         url,
         baseURL: "http://localhost:8080/api/",
@@ -13,9 +13,43 @@ function makeRequest (url, type, config = {}) {
         auth: {
             username,
             password
-          }
+          },
+        ...config
     }
     return axios.request(config)
+}
+
+function uploadFile(file, config = {})
+{
+  const formData = new FormData()
+  const url = 'upload';
+  formData.append('file', file)
+  let conf = {
+    ...config,
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+   }
+
+  return makeRequest(url, 'POST', conf)
+}
+
+function formDataRequest(url, data, config = {})
+{
+  var form_data = new FormData();
+      for ( var key in data ) {
+          form_data.append(key, data[key]);
+      }
+
+  let conf = {
+    ...config,
+    headers: {
+      'content-type': 'multipart/form-data'
+    },
+    data: form_data
+   }
+
+  return makeRequest(url, 'POST', conf)
 }
 
 // export default {makeRequest}
@@ -30,5 +64,7 @@ export default {
 
       app = {'test': 'test'}
     },
-    makeRequest
+    makeRequest,
+    uploadFile,
+    formDataRequest
   }

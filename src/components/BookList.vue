@@ -2,7 +2,7 @@
   <div class="hello">
     <div v-for="item of items" v-bind:key="item.id">
 
-      <p>{{item.id}}</p>
+      <router-link :to="'books/'+item.id">{{item.title}}</router-link>
 
     </div>
 
