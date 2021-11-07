@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <BookList v-bind:items="items"/>
+    <BookCardList v-bind:items="items"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import BookList from '@/components/BookList.vue'
+import BookCardList from '@/components/BookCardList.vue'
 import helpers from '../helpers.js';
 // import AppVue from '../App.vue';
 
@@ -14,7 +14,7 @@ import helpers from '../helpers.js';
 export default {
   name: 'Book',
   components: {
-    BookList
+    BookCardList
   },
   data() {
     return {
@@ -27,16 +27,23 @@ export default {
     //   console.log(res)
     // })
     // this.makeRequest("http://localhost:8080/home", "GET")
-    
+    this.$root.$emit("pageLoader", true)
+    if (!this.loaded) {
+      helpers.makeRequest("books", "get").then(res => {
+        let that = this;
+        this.items = res.data.map((item) => {
+          item.backgroundImg = that.$root.resourceUrl+'book-thumbnail/'+item.id
+          return item
+        })
+        console.log(this.items)
+        this.loaded = true;
+        this.$root.$emit("pageLoader", false)
+      })
+    }
     
   },
   created() {
-    if (!this.loaded) {
-      helpers.makeRequest("books", "get").then(res => {
-        this.items = res.data
-        this.loaded = true;
-      })
-    }
+    
   }
 
 }

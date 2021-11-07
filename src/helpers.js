@@ -19,6 +19,10 @@ function makeRequest (url, type, config = {}) {
     return axios.request(config)
 }
 
+function baseUrl() {
+  return 'http://localhost:8080/api/';
+}
+
 function uploadFile(file, config = {})
 {
   const formData = new FormData()
@@ -52,6 +56,11 @@ function formDataRequest(url, data, config = {})
   return makeRequest(url, 'POST', conf)
 }
 
+function loader()
+{
+  console.log()
+}
+
 // export default {makeRequest}
 
 export default {
@@ -66,5 +75,7 @@ export default {
     },
     makeRequest,
     uploadFile,
-    formDataRequest
+    formDataRequest,
+    loader,
+    baseUrl
   }
