@@ -9,8 +9,8 @@ Vue.config.productionTip = false
 let mixin = {
   data() {
     return {
-      baseUrl: 'http://localhost:8080/api/',
-      resourceUrl: 'http://localhost:8080/resource/'
+      baseUrl: process.env.VUE_APP_APIPATH+'api/',
+      resourceUrl: process.env.VUE_APP_APIPATH+'resource/'
     }
   },
   methods: {

@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <v-subheader style="font-size: 20px;">Recent Reads</v-subheader>
+    <BookCardList v-bind:items="items"/>
+    <v-subheader style="font-size: 20px;">All Books</v-subheader>
     <BookCardList v-bind:items="items"/>
   </div>
 </template>

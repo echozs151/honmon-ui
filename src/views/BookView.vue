@@ -39,7 +39,7 @@ export default {
             this.filename = this.book.book.filename;
             this.$root.$emit('resourceLoader', false)
 
-        })       
+        })
 
     },
     created() {
@@ -59,6 +59,7 @@ export default {
     methods: {
         downloadBook() {
             this.$root.$emit('resourceLoader', true)
+            this.$root.$emit('notifyAlert', "Be right back!  .o0  ᕦ(⚆Ѡ⚆)ᕥ");
             helpers.makeRequest("books/download/"+this.id, "get", {responseType: 'blob'}).then(res => {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement('a');

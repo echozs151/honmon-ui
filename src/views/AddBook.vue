@@ -1,8 +1,57 @@
 <template>
   <div class="home">
+    <v-card class="px-8 py-8">
     <form @submit.prevent="saveBook">
-    <p>Edit</p>
-    <v-text-field prepend-icon="mdi-book-open" v-model="form.title" name="title" label="Title"></v-text-field>
+    <v-text-field prepend-icon="mdi-book-open" v-model="form.title" name="title" label="Title" ></v-text-field>
+    <v-text-field prepend-icon="mdi-human" v-model="form.author" name="author" label="Author"></v-text-field>
+
+    <v-combobox
+    v-model="tags"
+    :items="items"
+    chips
+    clearable
+    label="Tags"
+    multiple
+    prepend-icon="mdi-link"
+    
+    >
+      <template v-slot:selection="{ attrs, item, select, selected }">
+        <v-chip
+          v-bind="attrs"
+          :input-value="selected"
+          close
+          @click="select"
+          @click:close="remove(item, 'tags')"
+        >
+          <strong>{{ item }}</strong>&nbsp;
+          <span>(interest)</span>
+        </v-chip>
+      </template>
+    </v-combobox>
+
+    <v-combobox
+    v-model="category"
+    :items="items"
+    chips
+    clearable
+    label="Category"
+    prepend-icon="mdi-shape"
+    >
+      <template v-slot:selection="{ attrs, item, select, selected }">
+        <v-chip
+          v-bind="attrs"
+          :input-value="selected"
+          close
+          @click="select"
+          @click:close="remove(item, 'category')"
+        >
+          <strong>{{ item }}</strong>&nbsp;
+          <span>(interest)</span>
+        </v-chip>
+      </template>
+    </v-combobox>
+
+
     <v-file-input
       v-model="file"
       name="file"
@@ -19,11 +68,20 @@
       label="Thumbnail"
     ></v-file-input>
 
+    <v-container fluid>
+      <v-textarea
+        name="description"
+        v-model="description"
+        label="Description"
+      ></v-textarea>
+    </v-container>
+
     <v-btn
       type="submit"
       elevation="2"
     >Save</v-btn>
     </form>
+    </v-card>
   </div>
 </template>
 
@@ -40,9 +98,14 @@ export default {
   },
   methods: {
     saveBook() {
-      
-
-      helpers.formDataRequest("books/new", {model: JSON.stringify(this.form), file: this.file, thumbnail: this.thumbnail})
+      this.$root.$emit('resourceLoader', true)
+      this.form.category = this.category;
+      this.form.tags = this.tags;
+      this.form.description = this.description;
+      helpers.formDataRequest("books/new", {model: JSON.stringify(this.form), file: this.file, thumbnail: this.thumbnail}).then(() => {
+        this.$root.$emit('resourceLoader', false)
+        this.$root.$emit('notifyAlert', "Done!");
+      })
       return;
       // helpers.uploadFile()
       // helpers.makeRequest("books/new", "post", {
@@ -52,14 +115,27 @@ export default {
       // }).then(res => {
       //   this.items = res.data
       // })
-    }
+    },
+    remove (item, collect) {
+      if (this[collect] instanceof Array) {
+        this[collect].splice(this[collect].indexOf(item), 1)
+        this[collect] = [...this[collect]]
+      } else {
+        this[collect] = ""
+      }
+      
+    },
   },
   data() {
     return {
       items: [],
       form: {},
       file: null,
-      thumbnail: null
+      thumbnail: null,
+      tags: [],
+      category: "",
+      description: "",
+      author: ""
     }
   },
   mounted() {

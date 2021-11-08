@@ -1,15 +1,34 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
+    v-bind:style="{backgroundImage: 'url('+image+')',backgroundSize: 'contain',backgroundPosition: 'bottom'}"
       v-model="drawer"
       app
     >
-    <div id="nav">
+    <div id="nav" >
       <div class="navlist-demo">
-      <router-link to="/">Home</router-link>
+      <!-- 
       <router-link to="/books">Books</router-link>
       <router-link to="/add-book">Add Book</router-link>
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> -->
+
+      <v-list dense nav>
+        <template v-for="route in routes">
+        <v-list-item  :key="route.name" link :to="route.path" v-if="route.nav">
+
+          <v-list-item-icon>
+            <v-icon>{{ route.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title >{{ route.name }}</v-list-item-title>
+          </v-list-item-content>
+
+        </v-list-item>
+        </template>
+      </v-list>
+
+
       </div>
     </div>
       <!--  -->
@@ -35,13 +54,27 @@
         </div>
       </v-container>
     </v-main>
+
+  <div class="notification-alert">
+    <v-alert 
+      :value="alert"
+      color="green"
+      dark
+      border="left"
+      transition="slide-x-transition"
+      >{{this.alertMsg}}</v-alert>
+  </div>
   </v-app>
+
+  
 </template>
 
 <script>
 import PageActions from "@/components/PageActions";
+import routeNav from "./router/index";
+
 export default {
-  data: () => ({drawer: null, test: null, appLoading: false, pageLoading: false, pageActions: []}),
+  data: () => ({routes: routeNav.options.routes, drawer: null, test: null, appLoading: false, pageLoading: false, pageActions: [], alert: false, alertMsg: "", image: '"https://pbs.twimg.com/media/FDQpC78VEAIgdOu?format=jpg&name=large"'}),
   components: {
     PageActions
   },
@@ -49,10 +82,33 @@ export default {
     this.$root.$on('resourceLoader', (toggle) => this.appLoading = toggle);
     this.$root.$on('pageLoader', (toggle) => this.pageLoading = toggle);
     this.$root.$on('setPageActions', (actions) => this.pageActions = actions);
+    this.$root.$on('notifyAlert', (msg) => {
+      this.alert = true;
+      this.alertMsg = msg;
+      console.log(this)
+      window.setTimeout(() => {
+        this.alert = false;
+        this.alertMsg = ""
+      }, 3000) 
+    })
 
     
   },
+  methods: {
+    hideAlert() {
+      console.log('Hide')
+      // `event` is the native DOM event
+         
+    }
+  },
   mounted() {
+    console.log();
+    // this.hideAlert();
+
+    
+
+    
+
   }
 }
 </script>
@@ -109,5 +165,11 @@ export default {
   transition: 800ms;
 
 
+}
+.notification-alert {
+  position: fixed;
+  bottom: 0;
+  right: 5px;
+  width: 250px;
 }
 </style>

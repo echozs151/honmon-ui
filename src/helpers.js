@@ -8,7 +8,7 @@ function makeRequest (url, type, config = {}) {
     config = { 
         // withCredentials: true
         url,
-        baseURL: "http://localhost:8080/api/",
+        baseURL: process.env.VUE_APP_APIPATH+"api/",
         method: type,
         auth: {
             username,
@@ -20,7 +20,7 @@ function makeRequest (url, type, config = {}) {
 }
 
 function baseUrl() {
-  return 'http://localhost:8080/api/';
+  return process.env.VUE_APP_APIPATH+'api/';
 }
 
 function uploadFile(file, config = {})
