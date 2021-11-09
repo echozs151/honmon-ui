@@ -14,7 +14,12 @@
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "@fontsource/noto-sans": "^4.5.1",
+    "@fontsource/noto-sans-hk": "^4.5.2",
+    "@fontsource/noto-sans-jp": "^4.5.2",
+    "@fontsource/noto-sans-kr": "^4.5.2",
+    "@fontsource/noto-sans-sc": "^4.5.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
