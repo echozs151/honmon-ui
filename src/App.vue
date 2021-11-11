@@ -149,6 +149,7 @@ export default {
   background-color: rgb(228, 228, 228);
   opacity: 0.7;
   pointer-events: none;
+  z-index: 5;
 
   
 

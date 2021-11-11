@@ -139,10 +139,12 @@ export default {
     methods: {
         initializeBooks() {
             this.$root.$emit("resourceLoader", true)
+            this.$root.$emit("pageLoader", true)
             helpers.makeRequest('books','get').then((res) => {
                 console.log(res.data);
                 this.desserts = res.data
                 this.$root.$emit("resourceLoader", false)
+                this.$root.$emit("pageLoader", false)
             })
         },
       initialize () {
@@ -227,14 +229,23 @@ export default {
       },
 
       deleteItem (item) {
+        console.log(item);
+        
         this.editedIndex = this.desserts.indexOf(item)
         this.editedItem = Object.assign({}, item)
+        
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
-        this.closeDelete()
+        this.$root.$emit("resourceLoader", true)
+        helpers.makeRequest('books/'+this.editedItem.id, 'delete').then(() => {
+          this.desserts.splice(this.editedIndex, 1)
+          this.$root.$emit("resourceLoader", false)
+          this.$root.$emit("notifyAlert", "Book removed")
+          this.closeDelete()
+        })
+        
       },
 
       close () {
