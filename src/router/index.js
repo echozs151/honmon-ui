@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Book from '../views/Book.vue'
 import AddBook from '../views/AddBook.vue'
 import BookView from '../views/BookView.vue'
+import BookReader from '../views/BookReader.vue'
 import Manage from '../views/Manage.vue'
 import ManageBooks from '../views/ManageBooks.vue'
 
@@ -38,6 +39,12 @@ const routes = [
     path: '/books/:id',
     name: 'Book View',
     component: BookView,
+    icon: "mdi-eye",
+  },
+  {
+    path: '/books/:id/reader',
+    name: 'Book Reader',
+    component: BookReader,
     icon: "mdi-eye",
   },
   {

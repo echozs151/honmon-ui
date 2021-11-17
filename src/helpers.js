@@ -16,6 +16,7 @@ function makeRequest (url, type, config = {}) {
           },
         ...config
     }
+    console.log(config)
     return axios.request(config)
 }
 
