@@ -7,7 +7,7 @@
     </div>
 
     <div class="cbz-viewpoint">
-        <img alt="hi" :src="this.imgSrc"/>
+        <img style="max-width: 100%; max-height: 1000px;" alt="hi" :src="this.imgSrc"/>
     </div>
   </div>
 </template>
@@ -36,13 +36,10 @@ export default {
     },
     methods: {
       loadFile(fileName) {
-        helpers.makeRequest("books/cbz-img/"+this.id,"POST", {
-          data: {
-            name: fileName
-          }
-        }).then((res) => {
-          console.log(res);
-        })
+        // helpers.makeRequest("books/cbz-img/"+this.id+"/"+btoa(fileName),"GET").then((res) => {
+        //   console.log(res);
+        // })
+        this.imgSrc = this.$root.resourceUrl+"cbz-img/"+this.id+"/"+btoa(fileName);
 
       }
 
@@ -55,7 +52,7 @@ export default {
     display: flex;
   }
   .cbz-viewpoint {
-    flex: 1;
+    flex: 1 1;
   }
   .entries-container {
     display: flex;
