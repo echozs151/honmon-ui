@@ -26,17 +26,22 @@ export default {
     name: 'BookView',
     mounted() {
         const id = this.$route.params.id
-        const pageActions = [
-            {key: 'read', icon: 'mdi-book-open', onClick: () => {window.open(this.$root.resourceUrl+'book-preview/'+id, '_blank')}},
-            {key: 'download', icon: 'mdi-download', onClick: () => this.downloadBook() },
-        ]
+        let readAction = {key: 'read', icon: 'mdi-book-open', onClick: () => {window.open(this.$root.resourceUrl+'book-preview/'+id, '_blank')}};
+        let downloadAction = {key: 'download', icon: 'mdi-download', onClick: () => this.downloadBook() };
+        
         this.id = id;
         this.$root.$emit('resourceLoader', true)
-        this.$root.$emit('setPageActions', pageActions)
+        
         this.thumbnail = this.$root.resourceUrl+'book-thumbnail/'+id;
         helpers.makeRequest("books/"+id, "get").then(res => {
             this.book = res.data
             this.filename = this.book.book.filename;
+            if (this.book.fileExtension == 'cbz') {
+                readAction.onClick = () => {
+                    window.open('/#/books/'+id+'/reader', '_blank')
+                }
+            }
+            this.$root.$emit('setPageActions', [readAction, downloadAction])
             this.$root.$emit('resourceLoader', false)
 
         })

@@ -39,7 +39,7 @@ function uploadFile(file, config = {})
   return makeRequest(url, 'POST', conf)
 }
 
-function formDataRequest(url, data, config = {})
+function formDataRequest(url, data, config = {}, req = "POST")
 {
   var form_data = new FormData();
       for ( var key in data ) {
@@ -54,7 +54,7 @@ function formDataRequest(url, data, config = {})
     data: form_data
    }
 
-  return makeRequest(url, 'POST', conf)
+  return makeRequest(url, req, conf)
 }
 
 function loader()
