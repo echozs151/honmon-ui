@@ -7,6 +7,9 @@ import BookView from '../views/BookView.vue'
 import BookReader from '../views/BookReader.vue'
 import Manage from '../views/Manage.vue'
 import ManageBooks from '../views/ManageBooks.vue'
+import Collections from '../views/Collections.vue'
+import Tags from '../views/Tags.vue'
+import Categories from '../views/Categories.vue'
 
 
 
@@ -32,6 +35,27 @@ const routes = [
     path: '/books',
     name: 'Books',
     component: Book,
+    icon: 'mdi-book',
+    nav: true
+  },
+  {
+    path: '/collections',
+    name: 'Collections',
+    component: Collections,
+    icon: 'mdi-book',
+    nav: true
+  },
+  {
+    path: '/categories',
+    name: 'Categories',
+    component: Categories,
+    icon: 'mdi-book',
+    nav: true
+  },
+  {
+    path: '/tags',
+    name: 'Tags',
+    component: Tags,
     icon: 'mdi-book',
     nav: true
   },

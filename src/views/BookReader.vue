@@ -12,11 +12,7 @@ export default {
   name: "MangaViewer",
   mounted() {
     
-    // axios.get(this.$root.resourceUrl+"cbz-meta/"+this.id).then((res) => {
-    //   console.log(res);
-    //   this.$root.$emit('resourceLoader', false)
 
-    // })
   },
   created() {
     this.id = this.$route.params.id

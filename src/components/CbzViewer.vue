@@ -12,23 +12,37 @@
       <div>{{imgZoom}}</div>
 
       <v-btn @click="toggleTwoPages()" icon text><v-icon>mdi-book-open</v-icon></v-btn>
+      <v-btn @click="toggleDirection()" icon text><v-icon>mdi-arrow-left</v-icon></v-btn>
       <div>{{currentPage.fileName}}</div>
       </v-card>
     </div>
 
     <div class="cbz-viewpoint">
-      <v-card style="display: flex;">
+      <v-card style="display: flex; overflow-x: scroll; overflow-y: hidden;">
         <template v-if="twoPages">
-          <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc1"/>
-          <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc2"/>  
+          <template v-if="!switchDirection">
+            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc1"/>
+            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc2"/>  
+          </template>
+          <template v-if="switchDirection">
+            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc2"/>  
+            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc1"/>
+          </template>
         </template>
         <template v-if="!twoPages">
           <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin: auto;" :src="this.imgSrc"/>  
         </template>
 
         <div class="cbz-inview-controls">
-          <div @click="prevPage()" class="cbz-control back"></div>
-          <div @click="nextPage()" class="cbz-control forward"></div>
+          <template v-if="!switchDirection">
+            <div @click="prevPage()" class="cbz-control back"></div>
+            <div @click="nextPage()" class="cbz-control forward"></div>
+          </template>
+          <template v-if="switchDirection">
+            <div @click="nextPage()" class="cbz-control forward"></div>
+            <div @click="prevPage()" class="cbz-control back"></div>
+          </template>
+          
         </div>
       </v-card>
     </div>
@@ -44,10 +58,14 @@ export default {
       id: null
     },
     mounted() {
-      console.log('loading '+ this.id)
       this.$root.$emit('resourceLoader', true)
       helpers.makeRequest("books/cbz-meta/"+this.id, "get").then((res) => {
         this.entries = res.data
+        helpers.makeRequest("books/"+this.id, "get").then((book) => {
+          if (book.data.progress > 0) {
+            this.loadFile(this.entries[book.data.progress-1])
+          }
+        })
         this.$root.$emit('resourceLoader', false)
       })
     },
@@ -56,20 +74,20 @@ export default {
         imgZoom: 1000,
         entries: [],
         imgSrc: null,
+        imgSrc1: null,
+        imgSrc2: null,
+
         currentPage: {
           fileName: null,
           nextPage: null,
           prevPage: null
         },
-        twoPages: false
+        twoPages: false,
+        switchDirection: false
       }
     },
     methods: {
       loadFile(fileName) {
-        // helpers.makeRequest("books/cbz-img/"+this.id+"/"+btoa(fileName),"GET").then((res) => {
-        //   console.log(res);
-        // })
-
         const index = this.entries.indexOf(fileName);
         if (this.twoPages) {
           let fileName2 = this.entries[index+1];
@@ -92,7 +110,6 @@ export default {
         }
         
         
-        console.log(this.currentPage)
         window.scrollTo(0, 0);
 
       },
@@ -108,8 +125,20 @@ export default {
         
       },
       toggleTwoPages() {
-        console.log('2 pages')
         this.twoPages = !this.twoPages;
+        if (this.currentPage) {
+          this.loadFile(this.currentPage.fileName)
+        }
+        
+        
+      },
+      toggleDirection() {
+        this.switchDirection = !this.switchDirection;
+      },
+      toggleOffset() {
+        this.loadFile(this.entries[this.currentPage.index + 1])
+
+        
       }
 
     }

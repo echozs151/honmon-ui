@@ -85,7 +85,6 @@ export default {
     this.$root.$on('notifyAlert', (msg) => {
       this.alert = true;
       this.alertMsg = msg;
-      console.log(this)
       window.setTimeout(() => {
         this.alert = false;
         this.alertMsg = ""
@@ -97,18 +96,10 @@ export default {
   methods: {
     hideAlert() {
       console.log('Hide')
-      // `event` is the native DOM event
-         
     }
   },
   mounted() {
-    console.log();
     // this.hideAlert();
-
-    
-
-    
-
   }
 }
 </script>

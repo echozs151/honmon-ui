@@ -122,7 +122,6 @@ export default {
             this.$root.$emit("resourceLoader", true)
             this.$root.$emit("pageLoader", true)
             helpers.makeRequest('books','get').then((res) => {
-                console.log(res.data);
                 this.desserts = res.data
                 this.$root.$emit("resourceLoader", false)
                 this.$root.$emit("pageLoader", false)
@@ -136,8 +135,6 @@ export default {
       },
 
       deleteItem (item) {
-        console.log(item);
-        
         this.editedIndex = this.desserts.indexOf(item)
         this.editedItem = Object.assign({}, item)
         
@@ -175,8 +172,6 @@ export default {
         if (this.editedIndex > -1) {
           this.$refs.editBook.saveBook()
           Object.assign(this.desserts[this.editedIndex], this.editedItem)
-          console.log(this.editedItem)
-          
         } else {
           this.desserts.push(this.editedItem)
         }

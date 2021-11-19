@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <v-subheader style="font-size: 20px;">Recent Reads</v-subheader>
-    <BookCardList v-bind:items="items"/>
+    <BookCardList v-bind:items="itemsRecent"/>
     <v-subheader style="font-size: 20px;">All Books</v-subheader>
     <BookCardList v-bind:items="items"/>
   </div>
@@ -22,14 +22,12 @@ export default {
   data() {
     return {
       items: [],
+      itemsRecent: [],
       loaded: false
     }
   },
   mounted() {
-    // axios.get("http://localhost:8080/home").then((res) => {
-    //   console.log(res)
-    // })
-    // this.makeRequest("http://localhost:8080/home", "GET")
+
     this.$root.$emit("pageLoader", true)
     if (!this.loaded) {
       helpers.makeRequest("books", "get").then(res => {
@@ -38,7 +36,16 @@ export default {
           item.backgroundImg = that.$root.resourceUrl+'book-thumbnail/'+item.id
           return item
         })
-        console.log(this.items)
+        this.itemsRecent = this.items
+          .filter((item) => {
+            return item.lastAccess != null;
+        })
+          .sort((a, b) => {
+            if (a && b) {
+              return new Date(b.lastAccess).getTime() - new Date(a.lastAccess).getTime();
+            }
+            
+          })
         this.loaded = true;
         this.$root.$emit("pageLoader", false)
       })

@@ -3,7 +3,6 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
-
 let app;
 Vue.config.productionTip = false
 let mixin = {
@@ -14,11 +13,7 @@ let mixin = {
     }
   },
   methods: {
-    testMixin: () => console.log('test mixin!'),
-    loader: (toggle) => {
-      console.log(app, toggle)
-    },
-    fnBaseUrl: function() {console.log('base url')}
+    testMixin: () => console.log('test mixin!')
   }
 }
 

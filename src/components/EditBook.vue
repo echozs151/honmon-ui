@@ -3,6 +3,7 @@
     
     <form @submit.prevent="saveBook">
     <v-text-field prepend-icon="mdi-book-open" v-model="form.title" name="title" label="Title" ></v-text-field>
+    <v-text-field prepend-icon="mdi-book-open" v-model="form.collection" name="collection" label="Collection" ></v-text-field>
     <v-text-field prepend-icon="mdi-human" v-model="form.author" name="author" label="Author"></v-text-field>
 
     <v-combobox
@@ -104,14 +105,15 @@ export default {
       this.form.tags = this.tags;
       this.form.description = this.description;
 
-      this.item.author = this.form.author;
-      this.item.title = this.form.title;
+      
       if (!this.item) {
         helpers.formDataRequest("books/new", {model: JSON.stringify(this.form), file: this.file, thumbnail: this.thumbnail}).then(() => {
           this.$root.$emit('resourceLoader', false)
           this.$root.$emit('notifyAlert', "Done!");
         })
       } else {
+        this.item.author = this.form.author;
+        this.item.title = this.form.title;
         helpers.formDataRequest("books/"+this.item.id, {model: JSON.stringify(this.form), thumbnail: this.thumbnail}, {}, "PUT").then(() => {
           this.$root.$emit('resourceLoader', false)
           this.$root.$emit('notifyAlert', "Done!");
@@ -144,24 +146,31 @@ export default {
   },
   mounted() {
     if (this.item) {
-      console.log(this.item)
       let val = this.item;
+      this.category = val.category;
+      this.tags = val.tags;
+      this.description = val.description;
       this.form = {
         ...this.form, 
         title: val.title,
         author: val.author,
         category: val.category,
+        collection: val.collection
         // tags: val.tags,
       };
     }
   },
   watch: {
     item(val) {
+      this.category = val.category;
+      this.tags = val.tags;
+      this.description = val.description;
       this.form = {
         ...this.form, 
         title: val.title,
         author: val.author,
         category: val.category,
+        collection: val.collection
         // tags: val.tags,
       };
     }

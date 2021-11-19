@@ -4,14 +4,19 @@
 
         <router-link class="book-item-card" tag="div" :to="'books/'+item.id" >
           <!-- <div class="placeholder-title-text">{{item.title}}</div> -->
-          <div class="book-item-card-inner" v-bind:style="{'background': 'url('+item.backgroundImg+')'}">
-            <div class="card-header"></div>
-            <div class="card-body"></div>
-            <div class="card-footer"></div>
-          </div>
-          <div class="book-item-card-outbox">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <div v-bind="attrs" v-on="on" class="book-item-card-inner" v-bind:style="{'background': 'url('+item.backgroundImg+')'}">
+                <div class="card-header"></div>
+                <div class="card-body"></div>
+                <div class="card-footer"></div>
+              </div>
+            </template>
             {{item.title}}
-          </div>
+          </v-tooltip>
+          <!-- <div class="book-item-card-outbox">
+            {{item.title}}
+          </div> -->
         </router-link>
 
       

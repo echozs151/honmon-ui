@@ -81,11 +81,7 @@ export default {
                     'Content-Type': 'image/*'
                 }
             }).then(res => {
-                console.log(res.headers)
                 this.thumbnail = "data:"+"image/png;base64,"+btoa(encodeURIComponent(res.data))
-                // console.log()
-                // console.log(this.thumbnail)
-
             })
         }
     }

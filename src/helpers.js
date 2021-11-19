@@ -16,7 +16,6 @@ function makeRequest (url, type, config = {}) {
           },
         ...config
     }
-    console.log(config)
     return axios.request(config)
 }
 
@@ -59,7 +58,6 @@ function formDataRequest(url, data, config = {}, req = "POST")
 
 function loader()
 {
-  console.log()
 }
 
 // export default {makeRequest}
