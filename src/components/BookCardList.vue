@@ -6,7 +6,7 @@
           <!-- <div class="placeholder-title-text">{{item.title}}</div> -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <div v-bind="attrs" v-on="on" class="book-item-card-inner" v-bind:style="{'background': 'url('+item.backgroundImg+')'}">
+              <div @load="loaded" v-bind="attrs" v-on="on" class="book-item-card-inner" v-bind:style="{'background': 'url('+item.backgroundImg+')'}">
                 <div class="card-header"></div>
                 <div class="card-body"></div>
                 <div class="card-footer"></div>
@@ -35,6 +35,11 @@ export default {
   data() {
     return {
 
+    }
+  },
+  methods: {
+    loaded() {
+      console.log('loaded')
     }
   }
 }

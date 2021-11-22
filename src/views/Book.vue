@@ -36,6 +36,7 @@ export default {
           item.backgroundImg = that.$root.resourceUrl+'book-thumbnail/'+item.id
           return item
         })
+
         this.itemsRecent = this.items
           .filter((item) => {
             return item.lastAccess != null;

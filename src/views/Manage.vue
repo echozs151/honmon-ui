@@ -4,6 +4,7 @@
       <div class="button-parade">
       <v-btn elevation="2" to="manage/books">Manage Books</v-btn>
       <v-btn elevation="2" to="manage/application">Manage Application</v-btn>
+      <v-btn elevation="2" to="manage/server">Manage Server</v-btn>
       </div>
   </div>
 </template>
