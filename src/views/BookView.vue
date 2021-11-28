@@ -38,7 +38,8 @@ export default {
             this.filename = this.book.book.filename;
             if (this.book.fileExtension == 'cbz') {
                 readAction.onClick = () => {
-                    window.open('/#/books/'+id+'/reader', '_blank')
+                    let route = this.$router.resolve({ path: "/books/"+id+"/reader" });
+                    window.open(route.href, '_blank')
                 }
             }
             this.$root.$emit('setPageActions', [readAction, downloadAction])

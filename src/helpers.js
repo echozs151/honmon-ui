@@ -1,12 +1,12 @@
 import axios from 'axios'
-
+let _helpRef;
 function makeRequest (url, type, config = {}) {
     const username = 'user'
     const password = 'user'
     // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-
+    _helpRef = this
     config = { 
-        // withCredentials: true
+        // withCredentials: false,
         url,
         baseURL: process.env.VUE_APP_APIPATH+"api/",
         method: type,
@@ -16,7 +16,9 @@ function makeRequest (url, type, config = {}) {
           },
         ...config
     }
-    return axios.request(config)
+    return axios.request(config).finally(() => {
+      loader()
+    })
 }
 
 function baseUrl() {
@@ -58,23 +60,28 @@ function formDataRequest(url, data, config = {}, req = "POST")
 
 function loader()
 {
+  if (_helpRef && _helpRef.comp) {
+    _helpRef.comp.$root.$emit("pageLoader", false)
+  }
+  
 }
 
 // export default {makeRequest}
 
 export default {
-    install: (app, options) => {
-      app.config.globalProperties.$translate = key => {
-        return key.split('.').reduce((o, i) => {
-          if (o) return o[i]
-        }, options)
-      }
+  comp: null,
+  install: (app, options) => {
+    app.config.globalProperties.$translate = key => {
+      return key.split('.').reduce((o, i) => {
+        if (o) return o[i]
+      }, options)
+    }
 
-      app = {'test': 'test'}
-    },
-    makeRequest,
-    uploadFile,
-    formDataRequest,
-    loader,
-    baseUrl
+    app = {'test': 'test'}
+  },
+  makeRequest,
+  uploadFile,
+  formDataRequest,
+  loader,
+  baseUrl
   }

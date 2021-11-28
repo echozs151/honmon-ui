@@ -11,6 +11,7 @@
 // @ is an alias to /src
 import BookCardList from '@/components/BookCardList.vue'
 import helpers from '../helpers.js';
+
 // import AppVue from '../App.vue';
 
 // import axios from 'axios'
@@ -27,7 +28,7 @@ export default {
     }
   },
   mounted() {
-
+    helpers.comp = this
     this.$root.$emit("pageLoader", true)
     if (!this.loaded) {
       helpers.makeRequest("books", "get").then(res => {
