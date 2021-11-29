@@ -6,7 +6,7 @@ function makeRequest (url, type, config = {}) {
     // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
     _helpRef = this
     config = { 
-        // withCredentials: false,
+        // withCredentials: true,
         url,
         baseURL: process.env.VUE_APP_APIPATH+"api/",
         method: type,
@@ -21,8 +21,8 @@ function makeRequest (url, type, config = {}) {
     })
 }
 
-function baseUrl() {
-  return process.env.VUE_APP_APIPATH+'api/';
+function baseUrl(api = true) {
+  return process.env.VUE_APP_APIPATH+ (api ? 'api/' : '');
 }
 
 function uploadFile(file, config = {})

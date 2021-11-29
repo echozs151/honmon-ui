@@ -1,51 +1,57 @@
 <template>
   <div class="cbz-viewer">
+    <v-container class="flex">
+    <v-col xs="12" sm="2" cols="2" class="flex-grow-0">
     <div class="entries-container">
       <v-card>
-      <div class="entries">
-        <div v-for="entry of this.entries" :key="entries.indexOf(entry)">
-          <a v-bind:class="{'selected': (entry == currentPage.fileName)}" @click="loadFile(entry)">{{entry}}</a>
-        </div>  
-      </div>
-      
-      <v-slider v-model="imgZoom" max="1500" min="750" label="zoom"></v-slider>
-      <div>{{imgZoom}}</div>
-
-      <v-btn @click="toggleTwoPages()" icon text><v-icon>mdi-book-open</v-icon></v-btn>
-      <v-btn @click="toggleDirection()" icon text><v-icon>mdi-arrow-left</v-icon></v-btn>
-      <div>{{currentPage.fileName}}</div>
-      </v-card>
-    </div>
-
-    <div class="cbz-viewpoint">
-      <v-card style="display: flex; overflow-x: scroll; overflow-y: hidden;">
-        <template v-if="twoPages">
-          <template v-if="!switchDirection">
-            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc1"/>
-            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc2"/>  
-          </template>
-          <template v-if="switchDirection">
-            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc2"/>  
-            <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc1"/>
-          </template>
-        </template>
-        <template v-if="!twoPages">
-          <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin: auto;" :src="this.imgSrc"/>  
-        </template>
-
-        <div class="cbz-inview-controls">
-          <template v-if="!switchDirection">
-            <div @click="prevPage()" class="cbz-control back"></div>
-            <div @click="nextPage()" class="cbz-control forward"></div>
-          </template>
-          <template v-if="switchDirection">
-            <div @click="nextPage()" class="cbz-control forward"></div>
-            <div @click="prevPage()" class="cbz-control back"></div>
-          </template>
-          
+        <div class="entries">
+          <div v-for="entry of this.entries" :key="entries.indexOf(entry)">
+            <a v-bind:class="{'selected': (entry == currentPage.fileName)}" @click="loadFile(entry)">{{entry}}</a>
+          </div>  
         </div>
+        
+        <v-slider v-model="imgZoom" max="1500" min="750" label="zoom"></v-slider>
+        <div>{{imgZoom}}</div>
+
+        <v-btn @click="toggleTwoPages()" icon text><v-icon>mdi-book-open</v-icon></v-btn>
+        <v-btn @click="toggleDirection()" icon text><v-icon>mdi-arrow-left</v-icon></v-btn>
+        <div>{{currentPage.fileName}}</div>
       </v-card>
     </div>
+    </v-col>
+
+    <v-col sm="10">
+        <div class="cbz-viewpoint">
+          <v-card style="display: flex; overflow-x: scroll; overflow-y: hidden;">
+            <template v-if="twoPages">
+              <template v-if="!switchDirection">
+                <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc1"/>
+                <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc2"/>  
+              </template>
+              <template v-if="switchDirection">
+                <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-left: auto;" :src="this.imgSrc2"/>  
+                <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin-right: auto;" :src="this.imgSrc1"/>
+              </template>
+            </template>
+            <template v-if="!twoPages">
+              <img v-bind:style="{ 'max-height': imgZoom+'px'}" style="max-width: 100%; display: flex; margin: auto;" :src="this.imgSrc"/>  
+            </template>
+
+            <div class="cbz-inview-controls">
+              <template v-if="!switchDirection">
+                <div @click="prevPage()" class="cbz-control back"></div>
+                <div @click="nextPage()" class="cbz-control forward"></div>
+              </template>
+              <template v-if="switchDirection">
+                <div @click="nextPage()" class="cbz-control forward"></div>
+                <div @click="prevPage()" class="cbz-control back"></div>
+              </template>
+              
+            </div>
+          </v-card>
+        </div>
+    </v-col>
+    </v-container>
   </div>
 </template>
 
@@ -55,19 +61,24 @@ import helpers from '../helpers';
 export default {
     name: "CbzViewer",
     props: {
-      id: null
+      id: null,
+      book: {}
     },
     mounted() {
-      this.$root.$emit('resourceLoader', true)
+      console.log(this.book)
       helpers.makeRequest("books/cbz-meta/"+this.id, "get").then((res) => {
         this.entries = res.data
-        helpers.makeRequest("books/"+this.id, "get").then((book) => {
-          if (book.data.progress > 0) {
-            this.loadFile(this.entries[book.data.progress-1])
-          }
-        })
+        if (this.book.progress > 0) {
+          this.loadFile(this.entries[this.book.progress-1])
+        }
         this.$root.$emit('resourceLoader', false)
       })
+    },
+    watch: {
+      book: (book) => {
+        console.log(book)
+        
+      }
     },
     data() {
       return {
@@ -147,7 +158,7 @@ export default {
 
 <style lang="scss" scoped>
   .cbz-viewer {
-    display: flex;
+    // display: flex;
   }
   .cbz-viewpoint {
     flex: 1 1;
